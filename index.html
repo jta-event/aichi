@@ -205,11 +205,12 @@
 
         .result-badge {
             display: inline-block;
-            padding: 6px 20px;
+            padding: 8px 24px;
             border-radius: 20px;
             font-weight: bold;
             font-size: 1.2rem;
             margin-bottom: 16px;
+            line-height: 1.4;
         }
 
         .win-badge {
@@ -280,6 +281,22 @@
             margin-bottom: 0;
         }
 
+        .lose-text {
+            line-height: 1.6;
+            color: #555555;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .lose-text p {
+            margin: 0 0 12px 0;
+        }
+
+        .lose-text p:last-child {
+            margin-bottom: 0;
+        }
+
         .admin-meta {
             font-size: 0.75rem;
             color: #a0a0a0;
@@ -339,7 +356,7 @@
 
             <!-- 当選結果 -->
             <div id="result-win" class="result-view win-box">
-                <div class="result-badge win-badge">当選（整理券）</div>
+                <div class="result-badge win-badge">当選<br>入場整理券</div>
                 
                 <div class="event-schedule">
                     ・開場時間：14時10分頃<br>
@@ -366,9 +383,11 @@
             <!-- 落選結果 -->
             <div id="result-lose" class="result-view lose-box">
                 <div class="result-badge lose-badge">落選</div>
-                <p style="line-height: 1.6; color: #555555; margin: 20px 0;">
-                    申し訳ございません。<br>ご希望の枠はお取りできませんでした。
-                </p>
+                <div class="lose-text">
+                    <p style="text-align: center; font-weight: bold; margin-bottom: 16px;">申し訳ございません。<br>ご希望の枠はお取りできませんでした。</p>
+                    <p>・抽選はお一人様1回までです。</p>
+                    <p>・前方観覧エリアにはご入場いただけませんが、その他のエリアからはご自由にご観覧いただけます。スタッフのご案内に従い、トークショーをお楽しみください。</p>
+                </div>
                 <div class="admin-meta">
                     <span id="lose-id-display">ID: --</span>
                 </div>
