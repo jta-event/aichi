@@ -72,8 +72,42 @@
             border-radius: 0 8px 8px 0;
             font-size: 0.85rem;
             color: #7e5109;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             line-height: 1.5;
+        }
+
+        /* 注意事項枠 */
+        .warning-box {
+            background-color: #fff9f3;
+            border: 1px solid #f3d1b0;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 24px;
+            font-size: 0.82rem;
+            color: #4a3b32;
+            line-height: 1.6;
+        }
+
+        .warning-box-title {
+            font-weight: bold;
+            color: #d35400;
+            margin-bottom: 8px;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .warning-box ul {
+            margin: 0;
+            padding-left: 16px;
+        }
+
+        .warning-box li {
+            margin-bottom: 6px;
+        }
+
+        .warning-box li:last-child {
+            margin-bottom: 0;
         }
 
         .form-group {
@@ -321,6 +355,16 @@
                 <div class="reception-info">
                     <strong>【受付時間】 10:45 〜 13:30</strong><br>
                     ※座席・整理番号は抽選で決定します。
+                </div>
+
+                <!-- 注意事項 -->
+                <div class="warning-box">
+                    <div class="warning-box-title">⚠️ お申し込み前の注意事項</div>
+                    <ul>
+                        <li>iPhone は Safari 、Android は GoogleChrome でアクセスしてください。また、プライベートモード/シークレットモードは使用しないでください。</li>
+                        <li>SNSアプリやQRコードリーダーアプリからアクセスすると、正しく動作せず、当選されても整理券が消失し、エリア内にご入場頂けない場合がございます。</li>
+                        <li>操作にご不安な方は、抽選を行う前にスタッフにお尋ねください。</li>
+                    </ul>
                 </div>
                 
                 <div class="form-group">
