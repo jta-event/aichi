@@ -353,7 +353,7 @@
             <!-- フォーム領域 -->
             <div id="setup-view">
                 <div class="reception-info">
-                    <strong>【抽選受付】 10:45 〜 13:30</strong><br>
+                    <strong>【抽選受付】 10:45 〜 13:20</strong><br>
                      ※座席・整理番号は抽選で決定します。<br>
                     <strong>【開場時間】14:10頃</strong><br>
                     <strong>【開演時間】14:30</strong>
@@ -363,7 +363,7 @@
                 <div class="warning-box">
                     <div class="warning-box-title">⚠️ お申し込み前の注意事項</div>
                     <ul>
-                        <li>iPhone は Safari 、Android は GoogleChrome でアクセスしてください。また、プライベートモード/シークレットモードは使用しないでください。</li>
+                        <li>iPhone は Safari 、Android は Google Chrome でアクセスしてください。また、プライベートモード/シークレットモードは使用しないでください。</li>
                         <li>SNSアプリやQRコードリーダーアプリからアクセスすると、正しく動作せず、当選されても整理券が消失し、エリア内にご入場頂けない場合がございます。</li>
                         <li>操作にご不安な方は、抽選を行う前にスタッフにお尋ねください。</li>
                         <li>抽選はお一人様1回までです。</li>
@@ -520,26 +520,33 @@
             document.getElementById('setup-view').style.display = 'none';
             document.getElementById('loading-view').style.display = 'flex';
 
+            // 30秒タイムアウト設定
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
+
             fetch(GAS_WEB_APP_URL, {
                 method: "POST",
                 body: JSON.stringify({
                     userId: userTicketId,
                     seatType: selectedSeatType,
                     count: selectedCount
-                })
+                }),
+                signal: controller.signal
             })
             .then(res => res.json())
             .then(data => {
+                clearTimeout(timeoutId);
                 document.getElementById('loading-view').style.display = 'none';
 
                 if (!data.success) {
-                    alert("エラー: " + (data.message || "もう一度お試しください。"));
+                    alert(data.message || "エラーが発生しました。もう一度お試しください。");
                     document.getElementById('setup-view').style.display = 'block';
                     return;
                 }
 
                 localStorage.setItem(STORAGE_KEY_DATE, getTodayDateString());
 
+                // 正常当選 or 重複等による過去結果復元
                 if (data.isWin) {
                     localStorage.setItem(STORAGE_KEY_STATUS, 'win');
                     localStorage.setItem(STORAGE_KEY_SEATS, JSON.stringify(data.seats));
@@ -551,9 +558,15 @@
                 }
             })
             .catch(err => {
+                clearTimeout(timeoutId);
                 document.getElementById('loading-view').style.display = 'none';
                 document.getElementById('setup-view').style.display = 'block';
-                alert("通信エラーが発生しました。電波状態をご確認の上再度お試しください。");
+
+                if (err.name === 'AbortError') {
+                    alert("混雑のため通信に時間がかかっています。再度「抽選を行う」を押すか、ページを再読み込みしてください。");
+                } else {
+                    alert("通信エラーが発生しました。電波状態をご確認の上再度お試しください。");
+                }
             });
         }
 
