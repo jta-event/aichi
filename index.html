@@ -76,7 +76,6 @@
             line-height: 1.6;
         }
 
-        /* 注意事項枠 */
         .warning-box {
             background-color: #fff9f3;
             border: 1px solid #f3d1b0;
@@ -190,7 +189,6 @@
             opacity: 0.7;
         }
 
-        /* ローディング */
         .loading-container {
             display: none;
             flex-direction: column;
@@ -219,7 +217,6 @@
             font-size: 1rem;
         }
 
-        /* 結果表示 */
         .result-view {
             display: none;
             border-radius: 12px;
@@ -353,7 +350,7 @@
             <!-- フォーム領域 -->
             <div id="setup-view">
                 <div class="reception-info">
-                    <strong>【抽選受付】 10:45 〜 13:20</strong><br>
+                    <strong>【抽選受付】 10:45 〜 13:30</strong><br>
                      ※座席・整理番号は抽選で決定します。<br>
                     <strong>【開場時間】14:10頃</strong><br>
                     <strong>【開演時間】14:30</strong>
@@ -444,7 +441,6 @@
     </div>
 
     <script>
-        // ★ご自身のGAS WebアプリURL
         const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycby_EN0vo4QuzDeJBv9rSfnvuzI1rZ1aHlLihQ3Pt3ziDcKC14Nyr98pJjqfjeX3hP_NqA/exec";
 
         const STORAGE_KEY_DATE = "marche_lottery_date";
@@ -520,7 +516,6 @@
             document.getElementById('setup-view').style.display = 'none';
             document.getElementById('loading-view').style.display = 'flex';
 
-            // 30秒タイムアウト設定
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 30000);
 
@@ -546,7 +541,6 @@
 
                 localStorage.setItem(STORAGE_KEY_DATE, getTodayDateString());
 
-                // 正常当選 or 重複等による過去結果復元
                 if (data.isWin) {
                     localStorage.setItem(STORAGE_KEY_STATUS, 'win');
                     localStorage.setItem(STORAGE_KEY_SEATS, JSON.stringify(data.seats));
