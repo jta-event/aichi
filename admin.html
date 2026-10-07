@@ -3,166 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理画面 | 佳久創さんトークショー 整理券管理</title>
+    <title>管理ダッシュボード - 佳久創さんトークショー</title>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #fcf8f2;
-            color: #333333;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f4f6f8;
             margin: 0;
-            padding: 16px;
+            padding: 20px;
+            color: #333;
         }
 
-        .admin-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #ffffff;
-            padding: 24px;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(211, 84, 0, 0.12);
-            border: 1px solid #f5e6d3;
-        }
-
-        h1 {
-            font-size: 1.5rem;
-            color: #d35400;
-            margin-top: 0;
-            border-bottom: 2px solid #fdf2e9;
-            padding-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn-logout {
-            font-size: 0.8rem;
-            background-color: #7f8c8d;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background-color: #fdf2e9;
-            border: 1px solid #f3d1b0;
-            padding: 16px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .stat-card .label {
-            font-size: 0.85rem;
-            color: #7e5109;
-            margin-bottom: 6px;
-        }
-
-        .stat-card .value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #d35400;
-        }
-
-        .controls {
-            margin-bottom: 20px;
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        button.action-btn {
-            background: linear-gradient(135deg, #e67e22, #d35400);
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button.danger-btn {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            font-size: 0.85rem;
-        }
-
-        th, td {
-            border: 1px solid #e0e0e0;
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f9f9f9;
-            color: #555;
-        }
-
-        /* 🔒 パスワード保護用認証モーダル */
-        #admin-auth-overlay {
+        /* パスワード入力モーダル／オーバーレイ */
+        #auth-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #fcf8f2;
-            z-index: 9999;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(244, 246, 248, 0.98);
             display: flex;
             justify-content: center;
             align-items: center;
+            z-index: 9999;
         }
 
         .auth-card {
-            background: #ffffff;
+            background-color: #ffffff;
             padding: 32px 24px;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(211, 84, 0, 0.15);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
-            max-width: 320px;
-            width: 90%;
-            border: 1px solid #f5e6d3;
+            width: 100%;
+            max-width: 360px;
         }
 
-        .auth-card h3 {
-            margin: 0 0 8px 0;
+        .auth-card h2 {
+            margin: 0 0 12px 0;
+            font-size: 1.25rem;
             color: #d35400;
-            font-size: 1.3rem;
         }
 
         .auth-card p {
+            margin: 0 0 20px 0;
             font-size: 0.85rem;
             color: #666;
-            margin-bottom: 20px;
         }
 
         .auth-input {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e2d8ce;
-            border-radius: 8px;
             font-size: 1.2rem;
+            letter-spacing: 0.2em;
             text-align: center;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
             box-sizing: border-box;
             margin-bottom: 12px;
-            letter-spacing: 0.2em;
             outline: none;
         }
 
@@ -172,7 +68,7 @@
 
         .auth-btn {
             width: 100%;
-            background: linear-gradient(135deg, #e67e22, #d35400);
+            background-color: #e67e22;
             color: white;
             border: none;
             padding: 12px;
@@ -180,209 +76,125 @@
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .auth-btn:hover {
+            background-color: #d35400;
         }
 
         .auth-error {
             color: #e74c3c;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             margin-top: 10px;
             display: none;
+        }
+
+        /* メインダッシュボードコンテンツ（初期状態は非表示） */
+        #admin-content {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: white;
+            padding: 16px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .btn-logout {
+            background: #95a5a6;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <!-- 🔒 暗証番号保護オーバーレイ画面 -->
-    <div id="admin-auth-overlay">
+    <!-- パスワード認証画面 -->
+    <div id="auth-overlay">
         <div class="auth-card">
-            <h3>🔒 管理者認証</h3>
-            <p>パスワードを入力してください</p>
-            <input type="password" id="admin-pass-input" class="auth-input" placeholder="****" maxlength="10">
-            <button class="auth-btn" onclick="verifyAdminPass()">ログイン</button>
-            <div id="auth-error-msg" class="auth-error">パスワードが違います</div>
+            <h2>スタッフ認証</h2>
+            <p>管理ダッシュボードを開くにはパスワードを入力してください。</p>
+            <form onsubmit="checkPassword(event)">
+                <input type="password" id="pass-input" class="auth-input" placeholder="パスワード" maxlength="10" autocomplete="off" autofocus>
+                <button type="submit" class="auth-btn">ログイン</button>
+            </form>
+            <div id="auth-error" class="auth-error">パスワードが違います。</div>
         </div>
     </div>
 
-    <!-- 管理画面メインコンテンツ -->
-    <div class="admin-container">
-        <h1>
-            管理ダッシュボード
-            <button class="btn-logout" onclick="logoutAdmin()">ロック</button>
-        </h1>
-
-        <!-- 集計カード -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="label">座り見 残り</div>
-                <div class="value" id="stat-sitting-left">--</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">立ち見 残り</div>
-                <div class="value" id="stat-standing-left">--</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">総当選者数</div>
-                <div class="value" id="stat-win-count">--</div>
-            </div>
+    <!-- 管理画面メインエリア -->
+    <div id="admin-content">
+        <div class="header">
+            <h1>スタッフ用管理ダッシュボード</h1>
+            <button class="btn-logout" onclick="logout()">ログアウト</button>
         </div>
 
-        <!-- 操作ボタン -->
-        <div class="controls">
-            <button class="action-btn" onclick="fetchAdminData()">データ手動更新</button>
-            <button class="danger-btn" onclick="resetDataConfirm()">⚠️ 全データを初期化</button>
+        <!-- ここに既存の管理ダッシュボードUI（当選者一覧、状況確認、抽選開始・リセットボタン等）を配置します -->
+        <div class="card" style="background: white; padding: 20px; border-radius: 8px;">
+            <p>ここに管理メニュー・当選一覧などを表示します。</p>
         </div>
-
-        <!-- ログ表示エリア -->
-        <h3>直近の抽選履歴</h3>
-        <table id="log-table">
-            <thead>
-                <tr>
-                    <th>日時</th>
-                    <th>ID</th>
-                    <th>種別</th>
-                    <th>人数</th>
-                    <th>結果</th>
-                    <th>割当座席</th>
-                </tr>
-            </thead>
-            <tbody id="log-tbody">
-                <tr><td colspan="6" style="text-align:center;">データを読み込み中...</td></tr>
-            </tbody>
-        </table>
     </div>
 
     <script>
-        // ★ご自身のGAS WebアプリURL
-        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycby_EN0vo4QuzDeJBv9rSfnvuzI1rZ1aHlLihQ3Pt3ziDcKC14Nyr98pJjqfjeX3hP_NqA/exec";
-        
-        const ADMIN_SESSION_KEY = "marche_admin_authenticated";
+        // 設定用パスワード
+        const ADMIN_PASSWORD = "0213";
+        const AUTH_STORAGE_KEY = "admin_authenticated";
 
-        // ページ読み込み時のパスワード自動判定（sessionStorage）
+        // ページ読み込み時の自動判定
         window.onload = function() {
-            const isAuthenticated = sessionStorage.getItem(ADMIN_SESSION_KEY);
-            if (isAuthenticated === "true") {
-                unlockAdminScreen();
-            } else {
-                document.getElementById('admin-pass-input').focus();
+            if (sessionStorage.getItem(AUTH_STORAGE_KEY) === "true") {
+                showDashboard();
             }
         };
 
         // パスワード確認処理
-        function verifyAdminPass() {
-            const inputPass = document.getElementById('admin-pass-input').value;
-            if (inputPass === '0213') {
-                // セッションストレージに保存（ブラウザタブを閉じるまで保持）
-                sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
-                unlockAdminScreen();
+        function checkPassword(event) {
+            event.preventDefault();
+            const inputVal = document.getElementById('pass-input').value;
+            const errorElement = document.getElementById('auth-error');
+
+            if (inputVal === ADMIN_PASSWORD) {
+                sessionStorage.setItem(AUTH_STORAGE_KEY, "true");
+                errorElement.style.display = 'none';
+                showDashboard();
             } else {
-                const errorMsg = document.getElementById('auth-error-msg');
-                errorMsg.style.display = 'block';
-                document.getElementById('admin-pass-input').value = '';
-                document.getElementById('admin-pass-input').focus();
+                errorElement.style.display = 'block';
+                document.getElementById('pass-input').value = '';
+                document.getElementById('pass-input').focus();
             }
         }
 
-        // ロック解除処理
-        function unlockAdminScreen() {
-            document.getElementById('admin-auth-overlay').style.display = 'none';
-            fetchAdminData(); // データロードを開始
+        // ダッシュボード画面表示
+        function showDashboard() {
+            document.getElementById('auth-overlay').style.display = 'none';
+            document.getElementById('admin-content').style.display = 'block';
+            
+            // ★ダッシュボードデータ読み込み関数などがあればここで実行
+            // initDashboardData();
         }
 
-        // 手動で再ロック（ログアウト）する
-        function logoutAdmin() {
-            sessionStorage.removeItem(ADMIN_SESSION_KEY);
+        // ログアウト処理
+        function logout() {
+            sessionStorage.removeItem(AUTH_STORAGE_KEY);
             location.reload();
-        }
-
-        // Enterキー押し下げ時にログインを実行
-        document.getElementById('admin-pass-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                verifyAdminPass();
-            }
-        });
-
-        // GASから管理データを取得
-        function fetchAdminData() {
-            fetch(GAS_WEB_APP_URL)
-            .then(res => res.json())
-            .then(data => {
-                renderDashboard(data);
-            })
-            .catch(err => {
-                alert("データの取得に失敗しました。");
-            });
-        }
-
-        // ダッシュボードへの描写
-        function renderDashboard(data) {
-            const master = data.master || [];
-            const logs = data.logs || [];
-
-            let sittingAvailable = 0;
-            let standingAvailable = 0;
-
-            // 残数計算
-            for (let i = 1; i < master.length; i++) {
-                const type = master[i][1];
-                const status = master[i][2];
-                if (status === 'AVAILABLE') {
-                    if (type === 'sitting') sittingAvailable++;
-                    if (type === 'standing') standingAvailable++;
-                }
-            }
-
-            document.getElementById('stat-sitting-left').textContent = sittingAvailable;
-            document.getElementById('stat-standing-left').textContent = standingAvailable;
-
-            // ログの描画 (最新順)
-            const tbody = document.getElementById('log-tbody');
-            tbody.innerHTML = '';
-
-            let winCount = 0;
-
-            for (let i = logs.length - 1; i >= 1; i--) {
-                const row = logs[i];
-                if (row[4] === 'WIN') winCount++;
-
-                const tr = document.createElement('tr');
-                const formattedDate = new Date(row[0]).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                
-                tr.innerHTML = `
-                    <td>${formattedDate}</td>
-                    <td>${row[1]}</td>
-                    <td>${row[2] === 'sitting' ? '座り' : '立ち'}</td>
-                    <td>${row[3]}</td>
-                    <td><strong style="color: ${row[4] === 'WIN' ? '#e67e22' : '#7f8c8d'}">${row[4]}</strong></td>
-                    <td>${row[5] || '-'}</td>
-                `;
-                tbody.appendChild(tr);
-            }
-
-            document.getElementById('stat-win-count').textContent = winCount;
-        }
-
-        // 全データ初期化（GASへPOST送信）
-        function resetDataConfirm() {
-            if (!confirm("本当に全ての当選データおよびログを初期化しますか？\n※この操作は取り消せません。")) return;
-
-            fetch(GAS_WEB_APP_URL, {
-                method: "POST",
-                body: JSON.stringify({
-                    action: "admin",
-                    subAction: "resetData",
-                    adminPass: "0213"
-                })
-            })
-            .then(res => res.json())
-            .then(resData => {
-                if (resData.success) {
-                    alert("データを初期化しました。");
-                    fetchAdminData();
-                } else {
-                    alert("エラー: " + resData.message);
-                }
-            })
-            .catch(err => alert("通信エラーが発生しました。"));
         }
     </script>
 </body>
