@@ -390,7 +390,7 @@
                     </div>
                 </div>
                 
-                <button class="btn-submit" id="btn-draw" onclick="drawLottery()" disabled>条件を選択してください</button>
+                <button class="btn-submit" id="btn-draw" onclick="drawLottery()" disabled>受付時間外</button>
             </div>
 
             <!-- ローディング領域 -->
@@ -449,6 +449,12 @@
         const STORAGE_KEY_COUNT = "marche_lottery_count";
         const STORAGE_KEY_ID = "marche_user_id";
 
+        // 受付開始・終了時間設定 (10:45 〜 13:30)
+        const START_HOUR = 10;
+        const START_MINUTE = 45;
+        const END_HOUR = 13;
+        const END_MINUTE = 30;
+
         let selectedSeatType = null;
         let selectedCount = null;
         let userTicketId = "";
@@ -481,8 +487,19 @@
                 showFinalResult(true, savedSeats, savedCount);
             } else if (status === 'lose') {
                 showFinalResult(false);
+            } else {
+                // 初回状態更新と定期チェックタイマー起動
+                updateSubmitButton();
+                setInterval(updateSubmitButton, 1000);
             }
         };
+
+        function checkReceptionTime() {
+            const now = new Date();
+            const startTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), START_HOUR, START_MINUTE, 0);
+            const endTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), END_HOUR, END_MINUTE, 0);
+            return (now >= startTime && now < endTime);
+        }
 
         function selectSeatType(type) {
             selectedSeatType = type;
@@ -501,7 +518,12 @@
 
         function updateSubmitButton() {
             const btn = document.getElementById('btn-draw');
-            if (selectedSeatType && selectedCount) {
+            const isWithinTime = checkReceptionTime();
+
+            if (!isWithinTime) {
+                btn.disabled = true;
+                btn.textContent = "受付時間外";
+            } else if (selectedSeatType && selectedCount) {
                 btn.disabled = false;
                 btn.textContent = "抽選を行う";
             } else {
@@ -511,6 +533,12 @@
         }
 
         function drawLottery() {
+            if (!checkReceptionTime()) {
+                alert("現在は受付時間外です。");
+                updateSubmitButton();
+                return;
+            }
+
             if (!selectedSeatType || !selectedCount) return;
 
             document.getElementById('setup-view').style.display = 'none';
@@ -536,6 +564,7 @@
                 if (!data.success) {
                     alert(data.message || "エラーが発生しました。もう一度お試しください。");
                     document.getElementById('setup-view').style.display = 'block';
+                    updateSubmitButton();
                     return;
                 }
 
@@ -555,6 +584,7 @@
                 clearTimeout(timeoutId);
                 document.getElementById('loading-view').style.display = 'none';
                 document.getElementById('setup-view').style.display = 'block';
+                updateSubmitButton();
 
                 if (err.name === 'AbortError') {
                     alert("混雑のため通信に時間がかかっています。再度「抽選を行う」を押すか、ページを再読み込みしてください。");
