@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理画面 | 佳久創さんトークショー 整理券管理</title>
+    <title>佳久創さんトークショー 前方観覧エリア整理券</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -11,378 +11,565 @@
             color: #333333;
             margin: 0;
             padding: 16px;
-        }
-
-        .admin-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #ffffff;
-            padding: 24px;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(211, 84, 0, 0.12);
-            border: 1px solid #f5e6d3;
-        }
-
-        h1 {
-            font-size: 1.5rem;
-            color: #d35400;
-            margin-top: 0;
-            border-bottom: 2px solid #fdf2e9;
-            padding-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn-logout {
-            font-size: 0.8rem;
-            background-color: #7f8c8d;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background-color: #fdf2e9;
-            border: 1px solid #f3d1b0;
-            padding: 16px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .stat-card .label {
-            font-size: 0.85rem;
-            color: #7e5109;
-            margin-bottom: 6px;
-        }
-
-        .stat-card .value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #d35400;
-        }
-
-        .controls {
-            margin-bottom: 20px;
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        button.action-btn {
-            background: linear-gradient(135deg, #e67e22, #d35400);
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button.danger-btn {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            font-size: 0.85rem;
-        }
-
-        th, td {
-            border: 1px solid #e0e0e0;
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f9f9f9;
-            color: #555;
-        }
-
-        /* 🔒 パスワード保護用認証モーダル */
-        #admin-auth-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #fcf8f2;
-            z-index: 9999;
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
 
-        .auth-card {
-            background: #ffffff;
-            padding: 32px 24px;
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background-color: #ffffff;
             border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(211, 84, 0, 0.15);
-            text-align: center;
-            max-width: 320px;
-            width: 90%;
+            box-shadow: 0 8px 24px rgba(211, 84, 0, 0.12);
+            overflow: hidden;
             border: 1px solid #f5e6d3;
         }
 
-        .auth-card h3 {
-            margin: 0 0 8px 0;
-            color: #d35400;
-            font-size: 1.3rem;
+        .header {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            color: #ffffff;
+            padding: 24px 20px;
+            text-align: center;
         }
 
-        .auth-card p {
+        .header-tag {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+            letter-spacing: 0.05em;
+        }
+
+        .header h1 {
+            margin: 0 0 6px 0;
+            font-size: 1.35rem;
+            font-weight: bold;
+            line-height: 1.3;
+        }
+
+        .header .sub-title {
+            margin: 0;
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 24px 20px;
+        }
+
+        .reception-info {
+            background-color: #fdf2e9;
+            border-left: 4px solid #e67e22;
+            padding: 12px 14px;
+            border-radius: 0 8px 8px 0;
             font-size: 0.85rem;
-            color: #666;
+            color: #7e5109;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        /* 注意事項枠 */
+        .warning-box {
+            background-color: #fff9f3;
+            border: 1px solid #f3d1b0;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 24px;
+            font-size: 0.82rem;
+            color: #4a3b32;
+            line-height: 1.6;
+        }
+
+        .warning-box-title {
+            font-weight: bold;
+            color: #d35400;
+            margin-bottom: 8px;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .warning-box ul {
+            margin: 0;
+            padding-left: 16px;
+        }
+
+        .warning-box li {
+            margin-bottom: 6px;
+        }
+
+        .warning-box li:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: #4a3b32;
+            margin-bottom: 10px;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .count-selector {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .option-btn {
+            background-color: #fafafa;
+            border: 2px solid #e2d8ce;
+            border-radius: 10px;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #555555;
+            user-select: none;
+        }
+
+        .option-btn small {
+            display: block;
+            margin-top: 3px;
+            color: #888888;
+            font-size: 0.75rem;
+        }
+
+        .option-btn.selected {
+            border-color: #e67e22;
+            background-color: #fdf2e9;
+            color: #d35400;
+            font-weight: bold;
+        }
+
+        .option-btn.selected small {
+            color: #e67e22;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(211, 84, 0, 0.25);
+            transition: opacity 0.2s, transform 0.1s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.99);
+        }
+
+        .btn-submit:disabled {
+            background: #cccccc;
+            box-shadow: none;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* ローディング */
+        .loading-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 0;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #fdf2e9;
+            border-top: 5px solid #e67e22;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #d35400;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        /* 結果表示 */
+        .result-view {
+            display: none;
+            border-radius: 12px;
+            padding: 20px 16px;
+            text-align: center;
+        }
+
+        .win-box {
+            background-color: #fef9f5;
+            border: 2px solid #e67e22;
+        }
+
+        .lose-box {
+            background-color: #fcfcfc;
+            border: 2px solid #bdc3c7;
+        }
+
+        .result-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .win-badge {
+            background-color: #e67e22;
+            color: #ffffff;
+        }
+
+        .lose-badge {
+            background-color: #7f8c8d;
+            color: #ffffff;
+        }
+
+        .event-schedule {
+            background-color: #ffffff;
+            border: 1px solid #f5e6d3;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 0.9rem;
+            color: #555555;
+            text-align: left;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .seat-display {
+            background-color: #ffffff;
+            border: 2px dashed #e67e22;
+            padding: 16px;
+            border-radius: 10px;
             margin-bottom: 20px;
         }
 
-        .auth-input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e2d8ce;
-            border-radius: 8px;
-            font-size: 1.2rem;
-            text-align: center;
-            box-sizing: border-box;
-            margin-bottom: 12px;
-            letter-spacing: 0.2em;
-            outline: none;
+        .seat-label {
+            font-size: 0.85rem;
+            color: #7e5109;
+            display: block;
+            margin-bottom: 4px;
         }
 
-        .auth-input:focus {
-            border-color: #e67e22;
-        }
-
-        .auth-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #e67e22, #d35400);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 1rem;
+        .seat-number {
+            font-size: 1.6rem;
             font-weight: bold;
-            cursor: pointer;
+            color: #d35400;
         }
 
-        .auth-error {
-            color: #e74c3c;
+        .notes-box {
+            text-align: left;
             font-size: 0.8rem;
-            margin-top: 10px;
-            display: none;
+            background-color: #ffffff;
+            border: 1px solid #f5e6d3;
+            padding: 14px;
+            border-radius: 8px;
+            line-height: 1.6;
+            color: #666666;
+        }
+
+        .notes-box ul {
+            margin: 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .notes-box li {
+            margin-bottom: 8px;
+        }
+
+        .notes-box li:last-child {
+            margin-bottom: 0;
+        }
+
+        .lose-text {
+            line-height: 1.6;
+            color: #555555;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .lose-text p {
+            margin: 0 0 12px 0;
+        }
+
+        .lose-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .admin-meta {
+            font-size: 0.75rem;
+            color: #a0a0a0;
+            margin-top: 16px;
+            padding-top: 10px;
+            border-top: 1px dashed #e0e0e0;
         }
     </style>
 </head>
 <body>
 
-    <!-- 🔒 暗証番号保護オーバーレイ画面 -->
-    <div id="admin-auth-overlay">
-        <div class="auth-card">
-            <h3>🔒 管理者認証</h3>
-            <p>パスワードを入力してください</p>
-            <input type="password" id="admin-pass-input" class="auth-input" placeholder="****" maxlength="10">
-            <button class="auth-btn" onclick="verifyAdminPass()">ログイン</button>
-            <div id="auth-error-msg" class="auth-error">パスワードが違います</div>
-        </div>
-    </div>
-
-    <!-- 管理画面メインコンテンツ -->
-    <div class="admin-container">
-        <h1>
-            管理ダッシュボード
-            <button class="btn-logout" onclick="logoutAdmin()">ロック</button>
-        </h1>
-
-        <!-- 集計カード -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="label">座り見 残り</div>
-                <div class="value" id="stat-sitting-left">--</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">立ち見 残り</div>
-                <div class="value" id="stat-standing-left">--</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">総当選者数</div>
-                <div class="value" id="stat-win-count">--</div>
-            </div>
+    <div class="container">
+        <div class="header">
+            <span class="header-tag">愛知を旅するマルシェ</span>
+            <h1>佳久創さんトークショー</h1>
+            <div class="sub-title">前方観覧エリア整理券</div>
         </div>
 
-        <!-- 操作ボタン -->
-        <div class="controls">
-            <button class="action-btn" onclick="fetchAdminData()">データ手動更新</button>
-            <button class="danger-btn" onclick="resetDataConfirm()">⚠️ 全データを初期化</button>
-        </div>
+        <div class="content">
+            <!-- フォーム領域 -->
+            <div id="setup-view">
+                <div class="reception-info">
+                    <strong>【抽選受付】 10:45 〜 13:30</strong><br>
+                     ※座席・整理番号は抽選で決定します。<br>
+                    <strong>【開場時間】14:10頃</strong><br>
+                    <strong>【開演時間】14:30</strong>
+                </div>
 
-        <!-- ログ表示エリア -->
-        <h3>直近の抽選履歴</h3>
-        <table id="log-table">
-            <thead>
-                <tr>
-                    <th>日時</th>
-                    <th>ID</th>
-                    <th>種別</th>
-                    <th>人数</th>
-                    <th>結果</th>
-                    <th>割当座席</th>
-                </tr>
-            </thead>
-            <tbody id="log-tbody">
-                <tr><td colspan="6" style="text-align:center;">データを読み込み中...</td></tr>
-            </tbody>
-        </table>
+                <!-- 注意事項 -->
+                <div class="warning-box">
+                    <div class="warning-box-title">⚠️ お申し込み前の注意事項</div>
+                    <ul>
+                        <li>iPhone は Safari 、Android は GoogleChrome でアクセスしてください。また、プライベートモード/シークレットモードは使用しないでください。</li>
+                        <li>SNSアプリやQRコードリーダーアプリからアクセスすると、正しく動作せず、当選されても整理券が消失し、エリア内にご入場頂けない場合がございます。</li>
+                        <li>操作にご不安な方は、抽選を行う前にスタッフにお尋ねください。</li>
+                        <li>抽選はお一人様1回までです。</li>
+                        <li>落選の場合、前方観覧エリアにはご入場いただけませんが、その他のエリアからはご観覧いただけます。</li>
+                    </ul>
+                </div>
+                
+                <div class="form-group">
+                    <label>1. 観覧方法を選択</label>
+                    <div class="option-grid">
+                        <div class="option-btn" id="btn-sitting" onclick="selectSeatType('sitting')">
+                            座り見<br><small>（1〜3列目）</small>
+                        </div>
+                        <div class="option-btn" id="btn-standing" onclick="selectSeatType('standing')">
+                            立ち見<br><small>（4列目）</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>2. 参加人数を選択</label>
+                    <div class="count-selector">
+                        <div class="option-btn" id="btn-count-1" onclick="selectCount(1)">1名</div>
+                        <div class="option-btn" id="btn-count-2" onclick="selectCount(2)">2名</div>
+                        <div class="option-btn" id="btn-count-3" onclick="selectCount(3)">3名</div>
+                        <div class="option-btn" id="btn-count-4" onclick="selectCount(4)">4名</div>
+                    </div>
+                </div>
+                
+                <button class="btn-submit" id="btn-draw" onclick="drawLottery()" disabled>条件を選択してください</button>
+            </div>
+
+            <!-- ローディング領域 -->
+            <div id="loading-view" class="loading-container">
+                <div class="spinner"></div>
+                <div class="loading-text">抽選処理中・・・</div>
+            </div>
+
+            <!-- 当選結果 -->
+            <div id="result-win" class="result-view win-box">
+                <div class="result-badge win-badge">当選</div>
+                
+                <div class="event-schedule">
+                    ・開場時間：14時10分頃<br>
+                    ・開演時間：14時30分
+                </div>
+
+                <div class="seat-display">
+                    <span class="seat-label">指定座席番号（人数: <span id="win-count">1</span>名）</span>
+                    <span class="seat-number" id="win-seats">1列1番</span>
+                </div>
+
+                <div class="notes-box">
+                    <ul>
+                        <li>◆ブラウザのこの画面はトークショー参加まで閉じずに保存してください。エラー等に備え、念のため本画面のスクリーンショットを撮影し、保存してください。入場時には、スクリーンショットではなく、ブラウザ上の本画面を確認いたします。</li>
+                        <li>◆2名様以上で当選の場合は、全員そろってからご入場ください。</li>
+                    </ul>
+                </div>
+                
+                <div class="admin-meta">
+                    <span id="win-id-display">ID: --</span>
+                </div>
+            </div>
+
+            <!-- 落選結果 -->
+            <div id="result-lose" class="result-view lose-box">
+                <div class="result-badge lose-badge">落選</div>
+                <div class="lose-text">
+                    <p style="text-align: center; font-weight: bold; margin-bottom: 16px;">申し訳ございません。<br>ご希望の枠はお取りできませんでした。</p>
+                    <p>・抽選はお一人様1回までです。</p>
+                    <p>・前方観覧エリアにはご入場いただけませんが、その他のエリアからはご観覧いただけます。スタッフのご案内に従い、トークショーをお楽しみください。</p>
+                </div>
+                <div class="admin-meta">
+                    <span id="lose-id-display">ID: --</span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
         // ★ご自身のGAS WebアプリURL
         const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycby_EN0vo4QuzDeJBv9rSfnvuzI1rZ1aHlLihQ3Pt3ziDcKC14Nyr98pJjqfjeX3hP_NqA/exec";
-        
-        const ADMIN_SESSION_KEY = "marche_admin_authenticated";
 
-        // ページ読み込み時のパスワード自動判定（sessionStorage）
+        const STORAGE_KEY_DATE = "marche_lottery_date";
+        const STORAGE_KEY_STATUS = "marche_lottery_status";
+        const STORAGE_KEY_SEATS = "marche_lottery_seats";
+        const STORAGE_KEY_COUNT = "marche_lottery_count";
+        const STORAGE_KEY_ID = "marche_user_id";
+
+        let selectedSeatType = null;
+        let selectedCount = null;
+        let userTicketId = "";
+
+        const getTodayDateString = () => {
+            const d = new Date();
+            return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+        };
+
         window.onload = function() {
-            const isAuthenticated = sessionStorage.getItem(ADMIN_SESSION_KEY);
-            if (isAuthenticated === "true") {
-                unlockAdminScreen();
-            } else {
-                document.getElementById('admin-pass-input').focus();
+            const todayStr = getTodayDateString();
+            const lastActiveDate = localStorage.getItem(STORAGE_KEY_DATE);
+
+            userTicketId = localStorage.getItem(STORAGE_KEY_ID);
+            if (!userTicketId) {
+                userTicketId = `TALK-${Math.random().toString(36).substring(2, 8).toUpperCase()}-${Date.now()}`;
+                localStorage.setItem(STORAGE_KEY_ID, userTicketId);
+            }
+
+            if (lastActiveDate !== todayStr) {
+                localStorage.removeItem(STORAGE_KEY_STATUS);
+                localStorage.removeItem(STORAGE_KEY_SEATS);
+                localStorage.removeItem(STORAGE_KEY_COUNT);
+            }
+
+            const status = localStorage.getItem(STORAGE_KEY_STATUS);
+            if (status === 'win') {
+                const savedSeats = JSON.parse(localStorage.getItem(STORAGE_KEY_SEATS) || "[]");
+                const savedCount = localStorage.getItem(STORAGE_KEY_COUNT) || "1";
+                showFinalResult(true, savedSeats, savedCount);
+            } else if (status === 'lose') {
+                showFinalResult(false);
             }
         };
 
-        // パスワード確認処理
-        function verifyAdminPass() {
-            const inputPass = document.getElementById('admin-pass-input').value;
-            if (inputPass === '0213') {
-                // セッションストレージに保存（ブラウザタブを閉じるまで保持）
-                sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
-                unlockAdminScreen();
+        function selectSeatType(type) {
+            selectedSeatType = type;
+            document.getElementById('btn-sitting').classList.toggle('selected', type === 'sitting');
+            document.getElementById('btn-standing').classList.toggle('selected', type === 'standing');
+            updateSubmitButton();
+        }
+
+        function selectCount(count) {
+            selectedCount = count;
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`btn-count-${i}`).classList.toggle('selected', i === count);
+            }
+            updateSubmitButton();
+        }
+
+        function updateSubmitButton() {
+            const btn = document.getElementById('btn-draw');
+            if (selectedSeatType && selectedCount) {
+                btn.disabled = false;
+                btn.textContent = "抽選を行う";
             } else {
-                const errorMsg = document.getElementById('auth-error-msg');
-                errorMsg.style.display = 'block';
-                document.getElementById('admin-pass-input').value = '';
-                document.getElementById('admin-pass-input').focus();
+                btn.disabled = true;
+                btn.textContent = "条件を選択してください";
             }
         }
 
-        // ロック解除処理
-        function unlockAdminScreen() {
-            document.getElementById('admin-auth-overlay').style.display = 'none';
-            fetchAdminData(); // データロードを開始
-        }
+        function drawLottery() {
+            if (!selectedSeatType || !selectedCount) return;
 
-        // 手動で再ロック（ログアウト）する
-        function logoutAdmin() {
-            sessionStorage.removeItem(ADMIN_SESSION_KEY);
-            location.reload();
-        }
-
-        // Enterキー押し下げ時にログインを実行
-        document.getElementById('admin-pass-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                verifyAdminPass();
-            }
-        });
-
-        // GASから管理データを取得
-        function fetchAdminData() {
-            fetch(GAS_WEB_APP_URL)
-            .then(res => res.json())
-            .then(data => {
-                renderDashboard(data);
-            })
-            .catch(err => {
-                alert("データの取得に失敗しました。");
-            });
-        }
-
-        // ダッシュボードへの描写
-        function renderDashboard(data) {
-            const master = data.master || [];
-            const logs = data.logs || [];
-
-            let sittingAvailable = 0;
-            let standingAvailable = 0;
-
-            // 残数計算
-            for (let i = 1; i < master.length; i++) {
-                const type = master[i][1];
-                const status = master[i][2];
-                if (status === 'AVAILABLE') {
-                    if (type === 'sitting') sittingAvailable++;
-                    if (type === 'standing') standingAvailable++;
-                }
-            }
-
-            document.getElementById('stat-sitting-left').textContent = sittingAvailable;
-            document.getElementById('stat-standing-left').textContent = standingAvailable;
-
-            // ログの描画 (最新順)
-            const tbody = document.getElementById('log-tbody');
-            tbody.innerHTML = '';
-
-            let winCount = 0;
-
-            for (let i = logs.length - 1; i >= 1; i--) {
-                const row = logs[i];
-                if (row[4] === 'WIN') winCount++;
-
-                const tr = document.createElement('tr');
-                const formattedDate = new Date(row[0]).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                
-                tr.innerHTML = `
-                    <td>${formattedDate}</td>
-                    <td>${row[1]}</td>
-                    <td>${row[2] === 'sitting' ? '座り' : '立ち'}</td>
-                    <td>${row[3]}</td>
-                    <td><strong style="color: ${row[4] === 'WIN' ? '#e67e22' : '#7f8c8d'}">${row[4]}</strong></td>
-                    <td>${row[5] || '-'}</td>
-                `;
-                tbody.appendChild(tr);
-            }
-
-            document.getElementById('stat-win-count').textContent = winCount;
-        }
-
-        // 全データ初期化（GASへPOST送信）
-        function resetDataConfirm() {
-            if (!confirm("本当に全ての当選データおよびログを初期化しますか？\n※この操作は取り消せません。")) return;
+            document.getElementById('setup-view').style.display = 'none';
+            document.getElementById('loading-view').style.display = 'flex';
 
             fetch(GAS_WEB_APP_URL, {
                 method: "POST",
                 body: JSON.stringify({
-                    action: "admin",
-                    subAction: "resetData",
-                    adminPass: "0213"
+                    userId: userTicketId,
+                    seatType: selectedSeatType,
+                    count: selectedCount
                 })
             })
             .then(res => res.json())
-            .then(resData => {
-                if (resData.success) {
-                    alert("データを初期化しました。");
-                    fetchAdminData();
+            .then(data => {
+                document.getElementById('loading-view').style.display = 'none';
+
+                if (!data.success) {
+                    alert("エラー: " + (data.message || "もう一度お試しください。"));
+                    document.getElementById('setup-view').style.display = 'block';
+                    return;
+                }
+
+                localStorage.setItem(STORAGE_KEY_DATE, getTodayDateString());
+
+                if (data.isWin) {
+                    localStorage.setItem(STORAGE_KEY_STATUS, 'win');
+                    localStorage.setItem(STORAGE_KEY_SEATS, JSON.stringify(data.seats));
+                    localStorage.setItem(STORAGE_KEY_COUNT, data.count);
+                    showFinalResult(true, data.seats, data.count);
                 } else {
-                    alert("エラー: " + resData.message);
+                    localStorage.setItem(STORAGE_KEY_STATUS, 'lose');
+                    showFinalResult(false);
                 }
             })
-            .catch(err => alert("通信エラーが発生しました。"));
+            .catch(err => {
+                document.getElementById('loading-view').style.display = 'none';
+                document.getElementById('setup-view').style.display = 'block';
+                alert("通信エラーが発生しました。電波状態をご確認の上再度お試しください。");
+            });
+        }
+
+        function showFinalResult(isWin, seats = [], count = "1") {
+            document.getElementById('setup-view').style.display = 'none';
+            document.getElementById('loading-view').style.display = 'none';
+
+            if (isWin) {
+                document.getElementById('win-count').textContent = count;
+                document.getElementById('win-seats').textContent = seats.join(", ");
+                document.getElementById('win-id-display').textContent = `ID: ${userTicketId}`;
+                document.getElementById('result-win').style.display = 'block';
+            } else {
+                document.getElementById('lose-id-display').textContent = `ID: ${userTicketId}`;
+                document.getElementById('result-lose').style.display = 'block';
+            }
         }
     </script>
 </body>
