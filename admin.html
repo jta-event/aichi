@@ -84,7 +84,7 @@
 
         /* ダッシュボード本体 */
         #admin-content {
-            display: none; /* パスワード解除まで非表示 */
+            display: none;
         }
 
         .header {
@@ -195,7 +195,7 @@
         <!-- 進捗率 -->
         <div class="progress-card">
             <div style="display:flex; justify-content:space-between; font-size:0.9rem; font-weight:bold;">
-                <span>時間経過進捗率（10:45〜13:20）</span>
+                <span>座席解放率（10:45〜13:10で全枠完了）</span>
                 <span id="progress-text">0%</span>
             </div>
             <div class="progress-bar-container">
@@ -254,9 +254,7 @@
     </div>
 
     <script>
-        // 設定値
         const CORRECT_PASS = "0213";
-        // ★ご自身のGAS WebアプリURLを設定
         const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycby_EN0vo4QuzDeJBv9rSfnvuzI1rZ1aHlLihQ3Pt3ziDcKC14Nyr98pJjqfjeX3hP_NqA/exec";
 
         let autoRefreshTimer = null;
