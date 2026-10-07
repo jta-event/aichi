@@ -262,11 +262,9 @@
         let autoRefreshTimer = null;
 
         window.onload = function() {
-            // すでに認証済みかチェック
             if (sessionStorage.getItem("admin_authenticated") === "true") {
                 unlockDashboard();
             } else {
-                // Enterキー対応
                 document.getElementById("input-pass").addEventListener("keypress", function(e) {
                     if (e.key === "Enter") {
                         checkPassword();
@@ -293,7 +291,6 @@
             document.getElementById("auth-overlay").style.display = "none";
             document.getElementById("admin-content").style.display = "block";
 
-            // 初回データ取得 & 5秒ごとの自動更新開始
             fetchAdminData();
             if (!autoRefreshTimer) {
                 autoRefreshTimer = setInterval(fetchAdminData, 5000);
@@ -310,18 +307,15 @@
                 if (!res.success) return;
                 const d = res.data;
 
-                // 時刻＆進捗
                 document.getElementById('last-update').textContent = `更新: ${d.currentTime}`;
                 document.getElementById('progress-text').textContent = `${d.progressPercent}%`;
                 document.getElementById('progress-bar').style.width = `${d.progressPercent}%`;
 
-                // 座り見
                 document.getElementById('sit-allowed').textContent = `${d.sitting.allowed} 席`;
                 document.getElementById('sit-used').textContent = `${d.sitting.used} 名`;
                 document.getElementById('sit-rem-allowed').textContent = `${d.sitting.remainingAllowed} 席`;
                 document.getElementById('sit-rem-total').textContent = `${d.sitting.remainingTotal} 席`;
 
-                // 立ち見
                 document.getElementById('stand-allowed').textContent = `${d.standing.allowed} 枠`;
                 document.getElementById('stand-used').textContent = `${d.standing.used} 名`;
                 document.getElementById('stand-rem-allowed').textContent = `${d.standing.remainingAllowed} 枠`;
